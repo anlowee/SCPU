@@ -17,10 +17,9 @@
 `define ALU_SUBU    4'b1000
 `define ALU_NOR     4'b1001 
 `define ALU_SLL     4'b1010 
-`define ALU_SLA     4'b1011 
-`define ALU_SRA     4'b1100 
-`define ALU_SRL     4'b1101 
-`define ALU_XOR     4'b1110  
+`define ALU_SRA     4'b1011 
+`define ALU_SRL     4'b1100 
+`define ALU_XOR     4'b1101  
 
 // load/store control signal
 `define DMRE_LW      3'b001
