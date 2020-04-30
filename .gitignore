@@ -1,0 +1,7 @@
+
+*.mpf
+*.dat
+*.dbs
+*.vhd
+work/_info
+work/_vmake
