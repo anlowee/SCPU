@@ -5,3 +5,4 @@
 *.vhd
 work/_info
 work/_vmake
+*.mti
