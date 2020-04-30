@@ -23,14 +23,69 @@
 `define ALU_XOR     4'b1110  
 
 // load/store control signal
-`define LW      3'b001
-`define LB      3'b010
-`define LH      3'b011
-`define LBU     3'b100
-`define LHU     3'b101
+`define DMRE_LW      3'b001
+`define DMRE_LB      3'b010
+`define DMRE_LH      3'b011
+`define DMRE_LBU     3'b100
+`define DMRE_LHU     3'b101
 
-`define SW      2'b01
-`define SB      2'b10
-`define SH      2'b11
+`define DMWR_SW      2'b01
+`define DMWR_SB      2'b10
+`define DMWR_SH      2'b11
 
+// Instruction op code and funct code
+`define R_TYPE  6'b000000
+// funct code
+`define ADD     6'b100000
+`define ADDU    6'b100001
+`define AND     6'b100100
+`define NOR     6'b100111
+`define OR      6'b100101
+`define SLL     6'b000000
+`define SLLV    6'b000100
+`define SLT     6'b101010
+`define SLTU    6'b101011 
+`define SRA     6'b000011
+`define SRAV    6'b000111
+`define SRL     6'b000010 
+`define SRLV    6'b000110
+`define SUB     6'b100010 
+`define SUBU    6'b100011 
+`define XOR     6'b100110 
+// jump funct code
+`define JALR    6'b001001
+`define JR      6'b001000 
+
+// R-I type op code
+`define ANDI    6'b001000 
+`define ADDIU   6'b001001 
+`define ANDI    6'b001100
+`define LUI     6'b001111
+`define ORI     6'b001101
+`define SLTI    6'b001010 
+`define SLTIU   6'b001011 
+`define XORI    6'b001110 
+
+// branch op code
+`define BEQ         6'b000100  
+`define BGTZ        6'b000111
+`define BLEZ        6'b000110 
+`define BNE         6'b000101 
+`define BLTZ_BGEZ   6'b000001 
+`define BGEZ        5'b00001
+`define BLTZ        5'b00000 
+
+// jump op code
+`define J       6'b000010 
+`define JAL     6'b000011 
+
+// l/s op code
+`define LB      6'b100000 
+`define LBU     6'b100100 
+`define LH      6'b100001 
+`define LHU     6'b100101 
+`define LW      6'b100011 
+`define SB      6'b101000 
+`define SH      6'b101001 
+`define SW      6'b101011 
 
