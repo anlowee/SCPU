@@ -2,7 +2,7 @@
   module RF(   input         clk, 
                input         rst,
                input         RFWr, 
-               input  [4:0]  A1, A2, A3,   // A1-rt, A2-rd, A3-write reg
+               input  [4:0]  A1, A2, A3,   // A1-rs, A2-rt, A3-write reg
                input  [31:0] WD, 
                output [31:0] RD1, RD2);
 
