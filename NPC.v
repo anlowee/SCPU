@@ -36,7 +36,8 @@ module NPC(PC, NPCOp, Reg, IMM, NPC, Zero, Gez, PCPLUS4);  // next pc module
           end
           `NPC_JUMP:   NPC = {PCPLUS4[31:28], IMM[25:0], 2'b00};
           `NPC_JUMPR:  NPC = Reg;
-          default:     NPC = PCPLUS4;
+          `NPC_NOP:   NPC = PC;
+          default:     NPC = PC;
       endcase
    end // end always
    

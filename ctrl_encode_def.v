@@ -7,7 +7,8 @@
 `define NPC_BRANCH_BGTZ     4'b0101   
 `define NPC_BRANCH_BLEZ     4'b0110 
 `define NPC_BRANCH_BLTZ     4'b0111 
-`define NPC_BRANCH_BNE      4'b1000 
+`define NPC_BRANCH_BNE      4'b1000
+`define NPC_NOP             4'B1001
 
 // RegDst control signal
 `define RD_RT     2'b00  // rt

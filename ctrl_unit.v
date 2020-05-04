@@ -401,8 +401,8 @@ module ctrl_unit(  // p176
             end
             default:    begin
                 // NOP
-                $display("NOP!%d", op);
-                NPCOp = `NPC_PLUS4;  
+                $display("over");
+                NPCOp = `NPC_NOP;  
                 RegDst = `RD_RT;  // x
                 ALUSrc = `ALUSRC_ZERO;  // x
                 ToReg = `DM2REG;  // x
