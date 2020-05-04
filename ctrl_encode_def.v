@@ -19,6 +19,12 @@
 `define ALU2REG     2'b01 
 `define NPC2REG     2'b10 
 
+// ALUSrc control signal
+`define ALUSRC_REG  2'b00 
+`define ALUSRC_IMM  2'b01
+`define ALUSRC_SHA  2'b10  // shamt
+`define ALUSRC_ZERO 2'b11  // used in BGTZ/...
+
 // ALU control signal
 `define ALU_NOP     5'b00000 
 `define ALU_ADD     5'b00001
@@ -34,8 +40,7 @@
 `define ALU_SRA     5'b01011 
 `define ALU_SRL     5'b01100 
 `define ALU_XOR     5'b01101 
-`define ALU_LUI     5'b01110
-`define ALU_SUBZ      5'b01111  
+`define ALU_LUI     5'b01110 
 `define ALU_R       5'b11111
 
 // load/store control signal

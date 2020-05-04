@@ -7,7 +7,7 @@ module ctrl_unit(  // p176
     output reg RFWr,
     output reg [3:0] NPCOp,
     input      [5:0] op,    //31:26
-    input      [5:0] funct,  // 5:0, used for distinct JALR and JAR
+    input      [5:0] funct,  // 5:0
     input      [4:0] bgez_bltz,  // 20:16
     output reg [4:0] ALUOp,
     output reg [1:0] DMWr,
@@ -19,18 +19,84 @@ module ctrl_unit(  // p176
                 // R-type
                 NPCOp = `NPC_PLUS4;
                 RegDst = `RD_RD;  // write into rd
-                ALUSrc = 1'b0;
                 ToReg = `ALU2REG;
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
-                ALUOp = `ALU_R;  // R-type, determined by funct code
+                
+                // ALU control unit
+                case (funct)
+                    `ADD:   begin   
+                        ALUOp = `ALU_ADD;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `ADDU:  begin 
+                        ALUOp = `ALU_ADDU;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `AND:   begin 
+                        ALUOp = `ALU_AND;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `NOR:   begin 
+                        ALUOp = `ALU_NOR;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `OR:    begin 
+                        ALUOp = `ALU_OR;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SLL:   begin 
+                        ALUOp = `ALU_SLL;
+                        ALUSrc = `ALUSRC_SHA;
+                    end
+                    `SLLV:  begin 
+                        ALUOp = `ALU_SLL;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SLT:   begin 
+                        ALUOp = `ALU_SLT;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SLTU:  begin 
+                        ALUOp = `ALU_SLTU;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SRA:   begin 
+                        ALUOp = `ALU_SRA;
+                        ALUSrc = `ALUSRC_SHA;
+                    end
+                    `SRAV:  begin 
+                        ALUOp = `ALU_SRA;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SRL:   begin 
+                        ALUOp = `ALU_SRL;
+                        ALUSrc = `ALUSRC_SHA;
+                    end
+                    `SRLV:  begin 
+                        ALUOp = `ALU_SRL;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SUB:   begin 
+                        ALUOp = `ALU_SUB;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `SUBU:  begin 
+                        ALUOp = `ALU_SUBU;
+                        ALUSrc = `ALUSRC_REG;
+                    end
+                    `XOR:   begin 
+                        ALUOp = `ALU_XOR;
+                        ALUSrc = `ALUSRC_SHA;
+                    end
+                endcase
             end
             `ADDI:  begin
                 // ADDI
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM;  // imm
                 ToReg = `ALU2REG;  
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -41,7 +107,7 @@ module ctrl_unit(  // p176
                 // ADDIU
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM; // imm
                 ToReg = `ALU2REG; 
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -52,7 +118,7 @@ module ctrl_unit(  // p176
                 // ANDI
                 NPCOp = `NPC_PLUS4;
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM;  // imm
                 ToReg = `ALU2REG; 
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -63,7 +129,7 @@ module ctrl_unit(  // p176
                 // LUI
                 NPCOp = `NPC_PLUS4;  
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM;  // imm
                 ToReg = `ALU2REG;  
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -74,7 +140,7 @@ module ctrl_unit(  // p176
                 // ORI
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM;  // imm
                 ToReg = `ALU2REG;  
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -85,7 +151,7 @@ module ctrl_unit(  // p176
                 // SLTI
                 NPCOp = `NPC_PLUS4;  
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM;  // imm
                 ToReg = `ALU2REG;  
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -96,7 +162,7 @@ module ctrl_unit(  // p176
                 // SLTIU
                 NPCOp = `NPC_PLUS4;  
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM; // imm
                 ToReg = `ALU2REG;  
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -107,7 +173,7 @@ module ctrl_unit(  // p176
                 // XORI
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // imm
+                ALUSrc = `ALUSRC_IMM; // imm
                 ToReg = `ALU2REG; 
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
@@ -118,7 +184,7 @@ module ctrl_unit(  // p176
                 // BEQ
                 NPCOp = `NPC_BRANCH_BEQ; 
                 RegDst = `RD_RT; // x
-                ALUSrc = 1'b0;  // ALU do sub operation
+                ALUSrc = `ALUSRC_REG;  // ALU do sub operation
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -129,29 +195,29 @@ module ctrl_unit(  // p176
                 // BGTZ
                 NPCOp = `NPC_BRANCH_BGTZ; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // zero
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
-                ALUOp = `ALU_SUBZ;
+                ALUOp = `ALU_SUB;
             end
             `BLEZ:  begin
                 // BLEZ
                 NPCOp = `NPC_BRANCH_BLEZ;  
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // zero
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
-                ALUOp = `ALU_SUBZ;
+                ALUOp = `ALU_SUB;
             end
             `BNE:  begin
                 // BNE
                 NPCOp = `NPC_BRANCH_BNE; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_REG;  // reg
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -161,24 +227,23 @@ module ctrl_unit(  // p176
             `BLTZ_BGEZ:  begin
                 // BLTZ and BGEZ
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // zero
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                ALUOp = `ALU_SUB;
                 if (bgez_bltz == 5'b00000) begin
                     NPCOp = `NPC_BRANCH_BLTZ; 
-                    ALUOp = `ALU_SUBZ;
                 end else begin
                     NPCOp = `NPC_BRANCH_BGEZ; 
-                    ALUOp = `ALU_SUBZ;
                 end
             end
             `J:  begin
                 // J
                 NPCOp = `NPC_JUMP; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // x
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -189,7 +254,7 @@ module ctrl_unit(  // p176
                 // JAL
                 NPCOp = `NPC_JUMP; 
                 RegDst = `RD_RA;  // write into %ra
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // x
                 ToReg = `NPC2REG;  // Next PC write into %ra
                 RFWr = 1'b1;  
                 DMRe = `DMRE_NOP; 
@@ -200,7 +265,7 @@ module ctrl_unit(  // p176
                 // JALR and JR
                 NPCOp = `NPC_JUMPR; 
                 RegDst = `RD_RD;  // if JALR then write into rd
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO; // x
                 ToReg = `NPC2REG;  // Next PC write into rd
                 if (funct == `JALR)
                     RFWr = 1'b1;
@@ -214,7 +279,7 @@ module ctrl_unit(  // p176
                 // LB
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // load data from DM into reg
                 RFWr = 1'b1;  
                 DMRe = `DMRE_LB; 
@@ -225,7 +290,7 @@ module ctrl_unit(  // p176
                 // LBU
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // load data from DM into reg
                 RFWr = 1'b1;  
                 DMRe = `DMRE_LBU; 
@@ -236,7 +301,7 @@ module ctrl_unit(  // p176
                 // LH
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // load data from DM into reg
                 RFWr = 1'b1;  
                 DMRe = `DMRE_LH; 
@@ -247,7 +312,7 @@ module ctrl_unit(  // p176
                 // LHU
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // load data from DM into reg
                 RFWr = 1'b1;  
                 DMRe = `DMRE_LHU; 
@@ -258,7 +323,7 @@ module ctrl_unit(  // p176
                 // LW
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // write into rt
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // load data from DM into reg
                 RFWr = 1'b1;  
                 DMRe = `DMRE_LW; 
@@ -269,7 +334,7 @@ module ctrl_unit(  // p176
                 // SB
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -280,7 +345,7 @@ module ctrl_unit(  // p176
                 // SH
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -291,7 +356,7 @@ module ctrl_unit(  // p176
                 // SW
                 NPCOp = `NPC_PLUS4; 
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b1;  // offset
+                ALUSrc = `ALUSRC_IMM;  // offset
                 ToReg = `DM2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
@@ -302,7 +367,7 @@ module ctrl_unit(  // p176
                 // NOP
                 NPCOp = `NPC_PLUS4;  
                 RegDst = `RD_RT;  // x
-                ALUSrc = 1'b0;  // x
+                ALUSrc = `ALUSRC_ZERO;  // x
                 ToReg = `DM2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 

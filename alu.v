@@ -38,7 +38,6 @@ module alu(A, B, ALUOp, C, Zero, Overflow, Gez);
          `ALU_LUI:  C = {A[15:0], 16'b0000_0000_0000_0000};  // LUI
          `ALU_SLT:  C = (A < B) ? 32'd1 : 32'd0;  // SLT/SLTI
          `ALU_SLTU: C = ({1'b0, A} < {1'b0, B}) ? 32'd1 : 32'd0;  // SLTU
-         `ALU_SUBZ:   C = A - 0;
          default:   C = A;  // Undefined
       endcase
    end // end always
