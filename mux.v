@@ -2,7 +2,7 @@
 
 module RegDstMux(
     input [4:0] rt, rd,
-    input RegDst,
+    input [1:0] RegDst,
     output reg [4:0] A3);
 
     always @(*) begin
@@ -18,7 +18,7 @@ endmodule
 
 module ALUSrcMux(
     input [31:0] RD2, Imm32, ShamtImm32,
-    input ALUSrc,
+    input [1:0] ALUSrc,
     output reg [31:0] B);
 
     always @(*) begin
@@ -35,7 +35,7 @@ endmodule
 
 module ToRegMux(
     input [31:0] DataOut, PCPLUS4, ALUResult,
-    input ToReg,
+    input [1:0] ToReg,
     output reg [31:0] RFWD);
 
     always @(*) begin

@@ -5,7 +5,7 @@ module NPC(PC, NPCOp, Reg, IMM, NPC, Zero, Gez, PCPLUS4);  // next pc module
    input Zero;  // ALU output: is equal to zero 
    input Gez;   // ALU output: is greater/equal to zero
    input  [31:0] PC;        // pc
-   input  [1:0]  NPCOp;     // next pc operation
+   input  [3:0]  NPCOp;     // next pc operation
    input  [25:0] IMM;       // immediate
    input  [31:0] Reg;       // data read from RF, used in jalr and jr
    output reg [31:0] NPC;   // next pc

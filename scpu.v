@@ -57,7 +57,7 @@ module scpu(
         .PC(pc)
     );
 
-    IM IM(.PC(pc), .Instruction(Instruction));
+    IM IM(.PC(pc[7:0]), .Instruction(Instruction));
     
     ctrl_unit ctrl_unit(
         .op(Instruction[31:26]),
@@ -71,7 +71,8 @@ module scpu(
         .NPCOp(NPCOp),
         .ALUOp(ALUOp),
         .DMWr(DMWr),
-        .DMRe(DMRe)
+        .DMRe(DMRe),
+        .EXTOp(EXTOp)
     );
 
     RegDstMux RegDstMux(
@@ -145,7 +146,7 @@ module scpu(
         .clk(clk),
         .DMWr(DMWr),
         .DMRe(DMRe),
-        .Addr(ALUResult),
+        .Addr(ALUResult[7:0]),
         .DataIn(RFDataOut2),
 
         .DataOut(DMDataOut)
