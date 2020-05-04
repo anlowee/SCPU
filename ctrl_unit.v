@@ -7,7 +7,7 @@ module ctrl_unit(  // p176
     output reg RFWr,
     output reg [3:0] NPCOp,
     input      [5:0] op,    //31:26
-    input      [5:0] funct,  // 5:0
+    input      [5:0] funct,  // 5:0, used for distinct JALR and JAR
     input      [4:0] bgez_bltz,  // 20:16
     output reg [4:0] ALUOp,
     output reg [1:0] DMWr,
@@ -202,7 +202,7 @@ module ctrl_unit(  // p176
                 RegDst = `RD_RD;  // if JALR then write into rd
                 ALUSrc = 1'b0;  // x
                 ToReg = `NPC2REG;  // Next PC write into rd
-                if (funct == 6'b001001)
+                if (funct == `JALR)
                     RFWr = 1'b1;
                 else 
                     RFWr = 1'b0;  
