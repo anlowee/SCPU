@@ -36,14 +36,14 @@ endmodule
 module ToRegMux(
     input [31:0] DataOut, PCPLUS4, ALUResult,
     input ToReg,
-    output reg [31:0] WD);
+    output reg [31:0] RFWD);
 
     always @(*) begin
         case (ToReg) 
-            `DM2REG:    WD <= DataOut;   
-            `ALU2REG:   WD <= ALUResult;
-            `NPC2REG:   WD <= PCPLUS4;
-            default:    WD <= 32'b0;
+            `DM2REG:    RFWD <= DataOut;   
+            `ALU2REG:   RFWD <= ALUResult;
+            `NPC2REG:   RFWD <= PCPLUS4;
+            default:    RFWD <= 32'b0;
         endcase
     end
 
