@@ -1,33 +1,52 @@
 // NPC control signal
-`define NPC_PLUS4       2'b00
-`define NPC_BRANCH      2'b01
-`define NPC_JUMP        2'b10
-`define NPC_JUMPR       2'b11
+`define NPC_PLUS4           4'b0000
+`define NPC_JUMP            4'b0001 
+`define NPC_JUMPR           4'b0010 
+`define NPC_BRANCH_BEQ      4'b0011  
+`define NPC_BRANCH_BGEZ     4'b0100  
+`define NPC_BRANCH_BGTZ     4'b0101   
+`define NPC_BRANCH_BLEZ     4'b0110 
+`define NPC_BRANCH_BLTZ     4'b0111 
+`define NPC_BRANCH_BNE      4'b1000 
 
+// RegDst control signal
+`define RD_RT     2'b00  // rt
+`define RD_RD     2'b01  // rd
+`define RD_RA     2'b10  // reg ra
+
+// ToReg control signal
+`define DM2REG      2'b00 
+`define ALU2REG     2'b01 
+`define NPC2REG     2'b10 
 
 // ALU control signal
-`define ALU_NOP     4'b0000 
-`define ALU_ADD     4'b0001
-`define ALU_SUB     4'b0010 
-`define ALU_AND     4'b0011
-`define ALU_OR      4'b0100
-`define ALU_SLT     4'b0101
-`define ALU_SLTU    4'b0110
-`define ALU_ADDU    4'b0111
-`define ALU_SUBU    4'b1000
-`define ALU_NOR     4'b1001 
-`define ALU_SLL     4'b1010 
-`define ALU_SRA     4'b1011 
-`define ALU_SRL     4'b1100 
-`define ALU_XOR     4'b1101  
+`define ALU_NOP     5'b00000 
+`define ALU_ADD     5'b00001
+`define ALU_SUB     5'b00010 
+`define ALU_AND     5'b00011
+`define ALU_OR      5'b00100
+`define ALU_SLT     5'b00101
+`define ALU_SLTU    5'b00110
+`define ALU_ADDU    5'b00111
+`define ALU_SUBU    5'b01000
+`define ALU_NOR     5'b01001 
+`define ALU_SLL     5'b01010 
+`define ALU_SRA     5'b01011 
+`define ALU_SRL     5'b01100 
+`define ALU_XOR     5'b01101 
+`define ALU_LUI     5'b01110
+`define ALU_SUBZ      5'b01111  
+`define ALU_R       5'b11111
 
 // load/store control signal
+`define DMRE_NOP     3'b000 
 `define DMRE_LW      3'b001
 `define DMRE_LB      3'b010
 `define DMRE_LH      3'b011
 `define DMRE_LBU     3'b100
 `define DMRE_LHU     3'b101
 
+`define DMWR_NOP     2'b00 
 `define DMWR_SW      2'b01
 `define DMWR_SB      2'b10
 `define DMWR_SH      2'b11
@@ -56,7 +75,7 @@
 `define JR      6'b001000 
 
 // R-I type op code
-`define ANDI    6'b001000 
+`define ADDI    6'b001000 
 `define ADDIU   6'b001001 
 `define ANDI    6'b001100
 `define LUI     6'b001111
@@ -77,6 +96,7 @@
 // jump op code
 `define J       6'b000010 
 `define JAL     6'b000011 
+`define JALR_JR 6'b000000
 
 // l/s op code
 `define LB      6'b100000 

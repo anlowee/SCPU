@@ -1,11 +1,12 @@
 `include "ctrl_encode_def.v"
 
-module alu(A, B, ALUOp, C, Zero, Overflow);
+module alu(A, B, ALUOp, C, Zero, Overflow, Gez);
            
    input  signed [31:0] A, B;
-   input         [3:0]  ALUOp;
+   input         [4:0]  ALUOp;
    output signed [31:0] C;
    output reg    Overflow;
+   output Gez;
    output Zero;
    
    reg [31:0] C;
@@ -34,13 +35,16 @@ module alu(A, B, ALUOp, C, Zero, Overflow);
          `ALU_SUBU: C = A - B;  // SUBU
          `ALU_AND:  C = A & B;  // AND/ANDI
          `ALU_OR:   C = A | B;  // OR/ORI
+         `ALU_LUI:  C = {A[15:0], 16'b0000_0000_0000_0000};  // LUI
          `ALU_SLT:  C = (A < B) ? 32'd1 : 32'd0;  // SLT/SLTI
          `ALU_SLTU: C = ({1'b0, A} < {1'b0, B}) ? 32'd1 : 32'd0;  // SLTU
+         `ALU_SUBZ:   C = A - 0;
          default:   C = A;  // Undefined
       endcase
    end // end always
    
    assign Zero = (C == 32'b0);
+   assign Gez = (C >= 32'b0);
 
 endmodule
     
