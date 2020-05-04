@@ -28,14 +28,17 @@ module alu(A, B, ALUOp, C, Zero, Overflow, Gez);
             Overflow = temp[32] ^ A[31] ^ B[31] ^ C[31];
          end 
          `ALU_NOR:  C = ~(A | B);  // NOR
-         `ALU_SLL:  C = A << B;  // SLL/SLLV
-         `ALU_SRA:  C = A >>> B;  // SRA/SRAV
-         `ALU_SRL:  C = A >> B;  // SRL/SRLV
+         `ALU_SLL:  C = A << B;  // SLL
+         `ALU_SLLV: C = B << {27'b0, A[4:0]};  // SLLV
+         `ALU_SRA:  C = A >>> B;  // SRA
+         `ALU_SRAV: C = B >>> {27'b0, A[4:0]};  // SRAV
+         `ALU_SRL:  C = A >> B;  // SRL
+         `ALU_SRLV: C = B >> {27'b0, A[4:0]};  // SRLV
          `ALU_XOR:  C = A ^ B;  // XOR 
          `ALU_SUBU: C = A - B;  // SUBU
          `ALU_AND:  C = A & B;  // AND/ANDI
          `ALU_OR:   C = A | B;  // OR/ORI
-         `ALU_LUI:  C = {A[15:0], 16'b0000_0000_0000_0000};  // LUI
+         `ALU_LUI:  C = {B[15:0], 16'b0000_0000_0000_0000};  // LUI
          `ALU_SLT:  C = (A < B) ? 32'd1 : 32'd0;  // SLT/SLTI
          `ALU_SLTU: C = ({1'b0, A} < {1'b0, B}) ? 32'd1 : 32'd0;  // SLTU
          default:   C = A;  // Undefined

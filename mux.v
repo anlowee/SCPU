@@ -48,3 +48,19 @@ module ToRegMux(
     end
 
 endmodule
+
+module ALUSrcMux0(
+    input [31:0] RD1, RD2,
+    input ALUSrc0,
+    output reg [31:0] A
+);
+
+    always @(*) begin
+        case (ALUSrc0)
+            1'b0:   A <= RD1;
+            1'b1:   A <= RD2;
+            default:    A <= RD1;
+        endcase
+    end
+
+endmodule

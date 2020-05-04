@@ -40,7 +40,10 @@
 `define ALU_SRA     5'b01011 
 `define ALU_SRL     5'b01100 
 `define ALU_XOR     5'b01101 
-`define ALU_LUI     5'b01110 
+`define ALU_LUI     5'b01110
+`define ALU_SLLV    5'b01111 
+`define ALU_SRAV    5'b10000 
+`define ALU_SRLV    5'b10001  
 `define ALU_R       5'b11111
 
 // load/store control signal

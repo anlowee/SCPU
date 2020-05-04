@@ -16,6 +16,7 @@ module scpu(
     wire [1:0] RegDst;
     wire [1:0] ToReg;
     wire [1:0] ALUSrc;
+    wire ALUSrc0;
     wire RFWr;
     wire EXTOp;
     wire [3:0] NPCOp;
@@ -44,6 +45,7 @@ module scpu(
 
     // mux
     wire [4:0] A3;  // write reg
+    wire [31:0] A;  // alu num1
     wire [31:0] B;  // alu num2
     wire [31:0] RFWD; // RF' WD
 
@@ -67,6 +69,7 @@ module scpu(
         .RegDst(RegDst),
         .ToReg(ToReg),
         .ALUSrc(ALUSrc),
+        .ALUSrc0(ALUSrc0),
         .RFWr(RFWr),
         .NPCOp(NPCOp),
         .ALUOp(ALUOp),
@@ -110,6 +113,14 @@ module scpu(
         .Imm32(EXTShamtOut)
     );
 
+    ALUSrcMux0 ALUSrcMux0(
+        .RD1(RFDataOut1),
+        .RD2(RFDataOut2),
+        .ALUSrc0(ALUSrc0),
+
+        .A(A)
+    );
+
     ALUSrcMux ALUSrcMux(
         .RD2(RFDataOut2),
         .Imm32(EXTOut),
@@ -120,7 +131,7 @@ module scpu(
     );
 
     alu alu(
-        .A(RFDataOut1),
+        .A(A),
         .B(B),
         .ALUOp(ALUOp),
 

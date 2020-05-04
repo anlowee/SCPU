@@ -7,6 +7,7 @@ module ctrl_unit(  // p176
     output reg RFWr,
     output reg [3:0] NPCOp,
     output reg EXTOp,
+    output reg ALUSrc0,  // select for A
     input      [5:0] op,    //31:26
     input      [5:0] funct,  // 5:0
     input      [4:0] bgez_bltz,  // 20:16
@@ -15,6 +16,15 @@ module ctrl_unit(  // p176
     output reg [2:0] DMRe);
 
     always @(*) begin
+        NPCOp = `NPC_PLUS4;  
+        RegDst = `RD_RT;  // x
+        ALUSrc = `ALUSRC_ZERO;  // x
+        ToReg = `DM2REG;  // x
+        RFWr = 1'b0;  
+        DMRe = `DMRE_NOP; 
+        DMWr = `DMWR_NOP; 
+        ALUOp = `ALU_NOP; 
+        ALUSrc0 = 1'b0;
         case (op)
             `R_TYPE:  begin
                 // R-type
@@ -50,10 +60,11 @@ module ctrl_unit(  // p176
                     `SLL:   begin 
                         ALUOp = `ALU_SLL;
                         ALUSrc = `ALUSRC_SHA;
+                        ALUSrc0 = 1'b1;
                         EXTOp = 1'b0;
                     end
                     `SLLV:  begin 
-                        ALUOp = `ALU_SLL;
+                        ALUOp = `ALU_SLLV;
                         ALUSrc = `ALUSRC_REG;
                     end
                     `SLT:   begin 
@@ -67,19 +78,21 @@ module ctrl_unit(  // p176
                     `SRA:   begin 
                         ALUOp = `ALU_SRA;
                         ALUSrc = `ALUSRC_SHA;
+                        ALUSrc0 = 1'b1;
                         EXTOp = 1'b0;
                     end
                     `SRAV:  begin 
-                        ALUOp = `ALU_SRA;
+                        ALUOp = `ALU_SRAV;
                         ALUSrc = `ALUSRC_REG;
                     end
                     `SRL:   begin 
                         ALUOp = `ALU_SRL;
                         ALUSrc = `ALUSRC_SHA;
+                        ALUSrc0 = 1'b1;
                         EXTOp = 1'b0;
                     end
                     `SRLV:  begin 
-                        ALUOp = `ALU_SRL;
+                        ALUOp = `ALU_SRLV;
                         ALUSrc = `ALUSRC_REG;
                     end
                     `SUB:   begin 
@@ -92,7 +105,7 @@ module ctrl_unit(  // p176
                     end
                     `XOR:   begin 
                         ALUOp = `ALU_XOR;
-                        ALUSrc = `ALUSRC_SHA;
+                        ALUSrc = `ALUSRC_REG;
                     end
                     `JALR:  begin
                         NPCOp = `NPC_JUMPR; 
@@ -397,6 +410,7 @@ module ctrl_unit(  // p176
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
                 ALUOp = `ALU_NOP; 
+                ALUSrc0 = 1'b0;
             end
         endcase
     end
