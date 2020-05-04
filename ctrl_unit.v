@@ -3,9 +3,10 @@
 module ctrl_unit(  // p176
     output reg [1:0] RegDst,
     output reg [1:0] ToReg,  // What write into Reg
-    output reg ALUSrc,
+    output reg [1:0] ALUSrc,
     output reg RFWr,
     output reg [3:0] NPCOp,
+    output reg EXTOp,
     input      [5:0] op,    //31:26
     input      [5:0] funct,  // 5:0
     input      [4:0] bgez_bltz,  // 20:16
@@ -49,6 +50,7 @@ module ctrl_unit(  // p176
                     `SLL:   begin 
                         ALUOp = `ALU_SLL;
                         ALUSrc = `ALUSRC_SHA;
+                        EXTOp = 1'b0;
                     end
                     `SLLV:  begin 
                         ALUOp = `ALU_SLL;
@@ -65,6 +67,7 @@ module ctrl_unit(  // p176
                     `SRA:   begin 
                         ALUOp = `ALU_SRA;
                         ALUSrc = `ALUSRC_SHA;
+                        EXTOp = 1'b0;
                     end
                     `SRAV:  begin 
                         ALUOp = `ALU_SRA;
@@ -73,6 +76,7 @@ module ctrl_unit(  // p176
                     `SRL:   begin 
                         ALUOp = `ALU_SRL;
                         ALUSrc = `ALUSRC_SHA;
+                        EXTOp = 1'b0;
                     end
                     `SRLV:  begin 
                         ALUOp = `ALU_SRL;
@@ -101,6 +105,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_ADD;
             end
             `ADDIU:  begin
@@ -112,6 +117,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_ADDU;
             end
             `ANDI:  begin
@@ -123,6 +129,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_AND;
             end
             `LUI:  begin
@@ -134,6 +141,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_LUI;
             end
             `ORI:  begin
@@ -145,6 +153,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_OR;
             end
             `SLTI:  begin
@@ -156,6 +165,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_SLT;
             end
             `SLTIU:  begin
@@ -167,6 +177,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_SLTU;
             end
             `XORI:  begin
@@ -178,6 +189,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b1;
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b0;
                 ALUOp = `ALU_XOR;
             end
             `BEQ:  begin
@@ -189,6 +201,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_SUB;
             end
             `BGTZ:  begin
@@ -199,7 +212,8 @@ module ctrl_unit(  // p176
                 ToReg = `ALU2REG;  // x
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
-                DMWr = `DMWR_NOP; 
+                DMWr = `DMWR_NOP;
+                EXTOp = 1'b1; 
                 ALUOp = `ALU_SUB;
             end
             `BLEZ:  begin
@@ -211,6 +225,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_SUB;
             end
             `BNE:  begin
@@ -222,6 +237,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_SUB;
             end
             `BLTZ_BGEZ:  begin
@@ -232,6 +248,7 @@ module ctrl_unit(  // p176
                 RFWr = 1'b0;  
                 DMRe = `DMRE_NOP; 
                 DMWr = `DMWR_NOP; 
+                EXTOp = 1'b1;
                 ALUOp = `ALU_SUB;
                 if (bgez_bltz == 5'b00000) begin
                     NPCOp = `NPC_BRANCH_BLTZ; 
