@@ -94,6 +94,26 @@ module ctrl_unit(  // p176
                         ALUOp = `ALU_XOR;
                         ALUSrc = `ALUSRC_SHA;
                     end
+                    `JALR:  begin
+                        NPCOp = `NPC_JUMPR; 
+                        RegDst = `RD_RA;  // if JALR then write into rd
+                        ALUSrc = `ALUSRC_ZERO; // x
+                        ToReg = `NPC2REG;  // Next PC write into rd
+                        RFWr = 1'b1; 
+                        DMRe = `DMRE_NOP; 
+                        DMWr = `DMWR_NOP; 
+                        ALUOp = `ALU_NOP;
+                    end
+                    `JR:    begin
+                        NPCOp = `NPC_JUMPR; 
+                        RegDst = `RD_RA;  // if JALR then write into rd
+                        ALUSrc = `ALUSRC_ZERO; // x
+                        ToReg = `NPC2REG;  // Next PC write into rd
+                        RFWr = 1'b0;  
+                        DMRe = `DMRE_NOP; 
+                        DMWr = `DMWR_NOP; 
+                        ALUOp = `ALU_NOP;
+                    end
                 endcase
             end
             `ADDI:  begin
@@ -278,20 +298,6 @@ module ctrl_unit(  // p176
                 DMWr = `DMWR_NOP; 
                 ALUOp = `ALU_NOP;
             end
-            `JALR_JR:  begin
-                // JALR and JR
-                NPCOp = `NPC_JUMPR; 
-                RegDst = `RD_RD;  // if JALR then write into rd
-                ALUSrc = `ALUSRC_ZERO; // x
-                ToReg = `NPC2REG;  // Next PC write into rd
-                if (funct == `JALR)
-                    RFWr = 1'b1;
-                else 
-                    RFWr = 1'b0;  
-                DMRe = `DMRE_NOP; 
-                DMWr = `DMWR_NOP; 
-                ALUOp = `ALU_NOP;
-            end
             `LB:  begin
                 // LB
                 NPCOp = `NPC_PLUS4; 
@@ -382,6 +388,7 @@ module ctrl_unit(  // p176
             end
             default:    begin
                 // NOP
+                $display("NOP!%d", op);
                 NPCOp = `NPC_PLUS4;  
                 RegDst = `RD_RT;  // x
                 ALUSrc = `ALUSRC_ZERO;  // x
