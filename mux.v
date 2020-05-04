@@ -1,111 +1,50 @@
-// mux2
-module mux2 #(parameter WIDTH = 8)
-             (d0, d1,
-              s, y);
-              
-    input  [WIDTH-1:0] d0, d1;
-    input              s;
-    output [WIDTH-1:0] y;
-              
-    assign y = ( s == 1'b1 ) ? d1:d0;
-    
+`include "ctrl_encode_def.v"
+
+module RegDstMux(
+    input [4:0] rt, rd,
+    input RegDst,
+    output reg [4:0] A3);
+
+    always @(*) begin
+        case (RegDst)
+            `RD_RT: A3 <= rt;
+            `RD_RD: A3 <= rd;
+            `RD_RA: A3 <= 5'b11111;
+            default:    A3 <= rt;
+        endcase
+    end
+
 endmodule
 
-// mux4
-module mux4 #(parameter WIDTH = 8)
-             (d0, d1, d2, d3,
-              s, y);
-    
-    input  [WIDTH-1:0] d0, d1, d2, d3;
-    input  [1:0] s;
-    output [WIDTH-1:0] y;
-    
-    reg [WIDTH-1:0] y_r;
-    
-    always @( * ) begin
-        case ( s )
-            2'b00: y_r = d0;
-            2'b01: y_r = d1;
-            2'b10: y_r = d2;
-            2'b11: y_r = d3;
-            default: ;
+module ALUSrcMux(
+    input [31:0] RD2, Imm32, ShamtImm32,
+    input ALUSrc,
+    output reg [31:0] B);
+
+    always @(*) begin
+        case (ALUSrc) 
+            `ALUSRC_REG:    B <= RD2;
+            `ALUSRC_IMM:    B <= Imm32;
+            `ALUSRC_SHA:    B <= ShamtImm32;
+            `ALUSRC_ZERO:   B <= 32'b0;
+            default:    B <= 32'b0;
         endcase
-    end // end always
-    
-    assign y = y_r;
-        
+    end
+
 endmodule
 
-// mux8
-module mux8 #(parameter WIDTH = 8)
-             (d0, d1, d2, d3,
-              d4, d5, d6, d7,
-              s, y);
-    
-    input  [WIDTH-1:0] d0, d1, d2, d3;
-    input  [WIDTH-1:0] d4, d5, d6, d7;
-    input  [2:0]       s;
-    output [WIDTH-1:0] y;
-    
-    reg [WIDTH-1:0] y_r;
-    
-    always @( * ) begin
-        case ( s )
-            3'd0: y_r = d0;
-            3'd1: y_r = d1;
-            3'd2: y_r = d2;
-            3'd3: y_r = d3;
-            3'd4: y_r = d4;
-            3'd5: y_r = d5;
-            3'd6: y_r = d6;
-            3'd7: y_r = d7;
-            default: ;
-        endcase
-    end // end always
-    
-    assign y = y_r;
-    
-endmodule
+module ToRegMux(
+    input [31:0] DataOut, PCPLUS4, ALUResult,
+    input ToReg,
+    output reg [31:0] WD);
 
-// mux16
-module mux16 #(parameter WIDTH = 8)
-             (d0, d1, d2, d3,
-              d4, d5, d6, d7,
-              d8, d9, d10, d11,
-              d12, d13, d14, d15,
-              s, y);
-    
-    input [WIDTH-1:0] d0, d1, d2, d3;
-    input [WIDTH-1:0] d4, d5, d6, d7;
-    input [WIDTH-1:0] d8, d9, d10, d11;
-    input [WIDTH-1:0] d12, d13, d14, d15;
-    input [3:0] s;
-    output [WIDTH-1:0] y;
-    
-    reg [WIDTH-1:0] y_r;
-    
-    always @( * ) begin
-        case ( s )
-            4'd0:  y_r = d0;
-            4'd1:  y_r = d1;
-            4'd2:  y_r = d2;
-            4'd3:  y_r = d3;
-            4'd4:  y_r = d4;
-            4'd5:  y_r = d5;
-            4'd6:  y_r = d6;
-            4'd7:  y_r = d7;
-            4'd8:  y_r = d8;
-            4'd9:  y_r = d9;
-            4'd10: y_r = d10;
-            4'd11: y_r = d11;
-            4'd12: y_r = d12;
-            4'd13: y_r = d13;
-            4'd14: y_r = d14;
-            4'd15: y_r = d15;
-            default: ;
+    always @(*) begin
+        case (ToReg) 
+            `DM2REG:    WD <= DataOut;   
+            `ALU2REG:   WD <= ALUResult;
+            `NPC2REG:   WD <= PCPLUS4;
+            default:    WD <= 32'b0;
         endcase
-    end // end always
-    
-    assign y = y_r;
-    
+    end
+
 endmodule
