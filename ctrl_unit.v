@@ -25,6 +25,7 @@ module ctrl_unit(  // p176
         DMWr = `DMWR_NOP; 
         ALUOp = `ALU_NOP; 
         ALUSrc0 = 1'b0;
+        EXTOp = 1'b1;
         case (op)
             `R_TYPE:  begin
                 // R-type
