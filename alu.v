@@ -46,7 +46,7 @@ module alu(A, B, ALUOp, C, Zero, Overflow, Gez);
    end // end always
    
    assign Zero = (C == 32'b0);
-   assign Gez = (C >= 32'b0);
+   assign Gez = (~C[31]);
 
 endmodule
     
