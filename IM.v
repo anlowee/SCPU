@@ -1,6 +1,6 @@
 module IM(PC, Instruction);  // 8-bits PC, not 32 bits
 
-    input   [7:0] PC;
+    input   [9:0] PC;
     output  [31:0] Instruction;
 
     reg [7:0] InstrctionMem[1023:0];

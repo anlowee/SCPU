@@ -59,7 +59,7 @@ module scpu(
         .PC(pc)
     );
 
-    IM IM(.PC(pc[7:0]), .Instruction(Instruction));
+    IM IM(.PC(pc[9:0]), .Instruction(Instruction));
     
     ctrl_unit ctrl_unit(
         .op(Instruction[31:26]),
@@ -157,7 +157,7 @@ module scpu(
         .clk(clk),
         .DMWr(DMWr),
         .DMRe(DMRe),
-        .Addr(ALUResult[7:0]),
+        .Addr(ALUResult[9:0]),
         .DataIn(RFDataOut2),
 
         .DataOut(DMDataOut)

@@ -5,7 +5,7 @@ module DM(clk, Addr, DMRe, DMWr, DataIn, DataOut);  // 8-bits PC, not 32 bits
     input clk;
     input   [1:0] DMWr;
     input   [2:0] DMRe;
-    input   [7:0] Addr;
+    input   [9:0] Addr;
     input   [31:0] DataIn;
     output reg [31:0] DataOut;
 
