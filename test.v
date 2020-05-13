@@ -6,7 +6,7 @@ module test;
 	
 	initial 
 	begin
-		clk = 0;
+		clk = 1;
 		rst = 0;
 		#10;
 		rst = 1;
