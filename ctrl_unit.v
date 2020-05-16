@@ -110,7 +110,7 @@ module ctrl_unit(  // p176
                     end
                     `JALR:  begin
                         NPCOp = `NPC_JUMPR; 
-                        RegDst = `RD_RA;  // if JALR then write into rd
+                        RegDst = `RD_RD;  // if JALR then write into rd
                         ALUSrc = `ALUSRC_ZERO; // x
                         ToReg = `NPC2REG;  // Next PC write into rd
                         RFWr = 1'b1; 
